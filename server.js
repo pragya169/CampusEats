@@ -1,20 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
 require('dotenv').config();
 
-const connectDB = require('./config/db');
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./auth');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5501;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5501',
+    'http://127.0.0.1:5501'
+  ],
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
-
-// Connect DB
-connectDB();
 
 // Routes
 app.use('/api', authRoutes);

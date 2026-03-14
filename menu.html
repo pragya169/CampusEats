@@ -91,33 +91,251 @@
           font-size: 2rem;
         }
       }
+      .chat-message {
+  padding: 10px 14px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  max-width: 75%;
+  font-size: 14px;
+  line-height: 1.4;
+  animation: fadeIn 0.3s ease;
+}
+
+.user-message {
+  background: #d63447;
+  color: white;
+  margin-left: auto;
+}
+
+.bot-message {
+  background: #f1f1f1;
+  color: #333;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   </head>
 
   <body>
-    <div class="container">
-      <h1>Where do you want to order from?</h1>
-      <div class="card-grid">
-        <div class="card" onclick="location.href='Southern.html'">
-          <img
-            src="https://thesouthernstory.com/cdn/shop/files/Untitled_Artwork_1.png?v=1732014610&width=500"
-            alt="Southern"/>
-          <div class="card-title">Southern Stories</div>
-        </div>
-        <div class="card" onclick="location.href='quench.html'">
-          <img
-            src="https://cdn.pixabay.com/photo/2024/03/01/19/50/ai-generated-8607140_1280.jpg"
-            alt="Quench"/>
-          <div class="card-title">Quench</div>
-        </div>
-        <div class="card" onclick="location.href='snapeats.html'">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ031Hxs-wy09ILy0w9k3lollqZ9u_3iT-aTw&s"
-            alt="SnapEats"/>
-          <div class="card-title">SnapEats</div>
-        </div>
+     <div class="container">
+  <h1>Where do you want to order from?</h1>
+
+  <div class="card-grid">
+    <div class="card" onclick="location.href='Southern.html'">
+      <img src="ChatGPT Image Mar 15, 2026, 02_34_48 AM.png" alt="Southern"/>
+      <div class="card-title">Southern Stories</div>
+    </div>
+
+    <div class="card" onclick="location.href='quench.html'">
+      <img src="https://cdn.pixabay.com/photo/2024/03/01/19/50/ai-generated-8607140_1280.jpg" alt="Quench"/>
+      <div class="card-title">Quench</div>
+    </div>
+
+    <div class="card" onclick="location.href='snapeats.html'">
+      <img src="ChatGPT Image Mar 15, 2026, 02_36_40 AM.png" alt="SnapEats"/>
+      <div class="card-title">SnapEats</div>
+    </div>
+  </div>
+
+  <!-- ADD BUTTON HERE -->
+  <button id="recommend-btn" style="
+  margin-top:20px;
+  padding:12px 20px;
+  border:none;
+  border-radius:10px;
+  background:#d63447;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  ">
+  🍽️ Recommend My Meal
+  </button>
+
+</div>
+
+    
+    <div id="chatbot-btn" style="position:fixed;bottom:30px;right:30px;z-index:1000;background:#d63447;color:#fff;border-radius:50%;width:60px;height:60px;display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.2);">💬</div>
+    <div id="chatbot-window" style="position:fixed;bottom:100px;right:30px;width:320px;max-width:90vw;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);display:none;flex-direction:column;z-index:1001;">
+      <div style="background:#d63447;color:#fff;padding:1rem;border-radius:16px 16px 0 0;font-weight:bold;">CampusEats Chatbot</div>
+      <div id="chatbot-messages" style="padding:1rem;height:180px;overflow-y:auto;font-size:1rem;color:#333;"></div>
+      <div style="display:flex;padding:0.5rem 1rem 1rem 1rem;gap:0.5rem;">
+        <input id="chatbot-input" type="text" placeholder="Ask for food recommendations..." style="flex:1;padding:0.5rem;border-radius:8px;border:1px solid #ddd;" />
+        <button id="chatbot-send" style="background:#d63447;color:#fff;border:none;border-radius:8px;padding:0.5rem 1rem;font-weight:bold;cursor:pointer;">Send</button>
       </div>
     </div>
+    <script>
+      const chatbotBtn = document.getElementById('chatbot-btn');
+      const chatbotWindow = document.getElementById('chatbot-window');
+      const chatbotMessages = document.getElementById('chatbot-messages');
+      const chatbotInput = document.getElementById('chatbot-input');
+      const chatbotSend = document.getElementById('chatbot-send');
+
+   let greeted = false;
+
+chatbotBtn.onclick = () => {
+
+  if (chatbotWindow.style.display === "flex") {
+    chatbotWindow.style.display = "none";
+  } else {
+    chatbotWindow.style.display = "flex";
+
+    if (!greeted) {
+      addChatMessage("Bot", "Hi! I'm the CampusEats bot 🍔 Ask me what you should eat!");
+      greeted = true;
+    }
+  }
+
+};
+
+
+
+
+
+     function addChatMessage(sender, text) {
+
+  const msg = document.createElement("div");
+
+  msg.classList.add("chat-message");
+
+  if (sender === "You") {
+    msg.classList.add("user-message");
+  } else {
+    msg.classList.add("bot-message");
+  }
+
+  msg.innerText = text;
+
+  chatbotMessages.appendChild(msg);
+
+  chatbotMessages.scrollTo({
+    top: chatbotMessages.scrollHeight,
+    behavior: "smooth"
+  });
+
+}
+
+
+      chatbotSend.onclick = () => {
+
+  const userMsg = chatbotInput.value.trim();
+  if (!userMsg) return;
+
+  addChatMessage("You", userMsg);
+  chatbotInput.value = "";
+
+  // typing indicator
+  const typingMsg = document.createElement("div");
+  typingMsg.innerText = "🤖 Bot is typing...";
+  typingMsg.style.fontStyle = "italic";
+  typingMsg.style.color = "#777";
+  typingMsg.style.marginBottom = "10px";
+
+  chatbotMessages.appendChild(typingMsg);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+  setTimeout(() => {
+
+    if (typingMsg.parentNode) {
+      typingMsg.parentNode.removeChild(typingMsg);
+    }
+
+    const response = getRecommendation(userMsg);
+    addChatMessage("Bot", response);
+
+  }, 1000);
+
+};
+
+
+     
+chatbotInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    chatbotSend.onclick();
+  }
+});
+
+
+      // function getRecommendation(msg) {
+      //   msg = msg.toLowerCase();
+      //   if (msg.includes('southern')) return 'Try the Masala Dosa and Uttapam from Southern Stories!';
+      //   if (msg.includes('quench')) return 'Quench offers refreshing shakes and Veg burgers. Would you like a Banana Shake?';
+      //   if (msg.includes('snapeats')) return 'SnapEats is famous for its loaded fries and burgers. Want a recommendation?';
+      //   if (msg.includes('burger')) return 'The Classic Cheese Burger from SnapEats is a must-try!';
+      //   if (msg.includes('fries')) return 'Fire and cheese Fries from Quench are very popular!';
+      //   if (msg.includes('coffee')) return 'Quench has great cold coffee. Would you like to try it?';
+      //   if (msg.includes('veg')) return 'Aloo Puri from Southern Stories for lunch and creamy soya roll from SnapEats are great options!';
+      //   if (msg.includes('non-veg')) return 'Chicken burger from SnapEats and Cheese Burger from SnapEats are top picks!';
+      //   if (msg.includes('what should i eat today')) return 'How about trying a roll from SnapEats or a burger from Quench? Both are highly recommended!';
+      //   return '';
+      // }
+      const foodDB = [
+ { name:"Masala Dosa", outlet:"Southern Stories", tags:["south indian","veg","crispy","breakfast","dosa"] },
+ { name:"Uttapam", outlet:"Southern Stories", tags:["south indian","veg","lunch"] },
+ { name:"Banana Shake", outlet:"Quench", tags:["drink","shake","sweet"] },
+ { name:"Cold Coffee", outlet:"Quench", tags:["coffee","drink","cold","caffeine"] },
+ { name:"Classic Cheese Burger", outlet:"SnapEats", tags:["burger","cheesy","fast food"] },
+ { name:"Loaded Fries", outlet:"SnapEats", tags:["fries","snack","fast food"] },
+ { name:"Chicken Burger", outlet:"SnapEats", tags:["burger","non veg","chicken"] }
+];
+const recommendBtn = document.getElementById("recommend-btn");
+
+recommendBtn.onclick = () => {
+
+  const hour = new Date().getHours();
+  let suggestion;
+
+  if (hour < 11) {
+    suggestion = "Masala Dosa from Southern Stories 🍳";
+  } 
+  else if (hour < 16) {
+    suggestion = "Uttapam from Southern Stories 🍛";
+  } 
+  else if (hour < 20) {
+    suggestion = "Loaded Fries from SnapEats 🍟";
+  } 
+  else {
+    suggestion = "Classic Cheese Burger from SnapEats 🍔";
+  }
+
+  chatbotWindow.style.display = "flex";
+  addChatMessage("Bot", `Based on the time of day, I recommend ${suggestion}`);
+};
+
+
+
+       function getRecommendation(msg) {
+
+  msg = msg.toLowerCase();
+
+  for (let food of foodDB) {
+    for (let tag of food.tags) {
+      if (msg.includes(tag)) {
+        return `You might like ${food.name} from ${food.outlet}! 🍽️`;
+      }
+    }
+  }
+
+  if (msg.includes("hungry") || msg.includes("what should i eat")) {
+    const randomFood = foodDB[Math.floor(Math.random()*foodDB.length)];
+    return `How about trying ${randomFood.name} from ${randomFood.outlet}? 😋`;
+  }
+
+  return "Tell me what you're craving! Burgers, dosa, fries, coffee, shakes etc.";
+}
+
+    </script>
   </body>
 </html>

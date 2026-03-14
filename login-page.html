@@ -139,7 +139,7 @@
       const password = document.getElementById("login-password").value;
   
       try {
-        const res = await fetch('http://localhost:5000/api/login', {
+        const res = await fetch('http://localhost:5501/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -158,8 +158,41 @@
         alert('Something went wrong!');
       }
     });
-  
-    // Optional: Handle Sign Up
+
+    // SIGNUP submission
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("signup-email").value;
+      const password = document.getElementById("signup-password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:5501/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          alert('Signup successful! Please log in.');
+          signupContainer.style.display = "none";
+          loginContainer.style.display = "block";
+        } else {
+          alert(`Signup failed: ${data.message}`);
+        }
+      } catch (err) {
+        console.error('Signup error:', err);
+        alert('Something went wrong!');
+      }
+    });
   </script>
   
 </body>
